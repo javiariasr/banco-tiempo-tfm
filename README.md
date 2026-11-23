@@ -7,25 +7,36 @@
 
 ## 1. Descripción General del Proyecto
 
-**ChronoShare** es una plataforma web de economía colaborativa basada en el intercambio de servicios utilizando el **tiempo como única moneda de cambio** (1 hora ofrecida = 1 hora recibida, independientemente de la complejidad del servicio).
+**ChronoShare** es una plataforma web donde las personas intercambian favores, clases o servicios **pagando únicamente con su tiempo en lugar de usar euros**. 
 
-Está diseñada específicamente para **comunidades universitarias y entornos locales** (barrios o asociaciones), permitiendo que estudiantes y vecinos intercambien habilidades —como clases particulares, idiomas, diseño gráfico, reparaciones domésticas o soporte informático— sin necesidad de dinero y fomentando la confianza mutua.
+La regla es muy sencilla: **1 hora de tu tiempo vale exactamente lo mismo que 1 hora del tiempo de cualquier otra persona**, sin importar si das una clase de programación avanzada, ayudas a alguien con una mudanza o paseas a su perro.
 
-### El problema que resuelve
-Los bancos de tiempo tradicionales suelen fracasar por dos motivos: **falta de confianza** entre desconocidos y **fricción en la gestión de saldos**. ChronoShare soluciona esto mediante un sistema de **retención preventiva de horas (*Escrow*)**, perfiles verificados y un historial contable transparente.
+### 💡 ¿Cómo funciona en la práctica? (Un ejemplo real)
+
+Imagina que tres estudiantes de la misma universidad se registran en ChronoShare:
+
+1. **El inicio:** Al registrarse, cada uno recibe **2 horas gratis** en su cuenta para poder empezar a pedir ayuda sin tener que esperar.
+2. **Ana necesita ayuda:** A Ana se le da mal el inglés, así que busca en la web y encuentra a **Carlos**, que ofrece clases de conversación. Ana le pide **1 hora de clase**. El sistema le congela esa hora a Ana para asegurarle a Carlos que podrá cobrarla.
+3. **El intercambio:** Dan la clase por videollamada. Al terminar, ambos confirman en la web que todo ha ido bien. En ese momento, esa **1 hora pasa de la cuenta de Ana a la de Carlos** (Ana se queda con 1 hora y Carlos sube a 3 horas).
+4. **La cadena continúa:** Ahora **Carlos** tiene 3 horas acumuladas y decide gastar **2 horas** pidiéndole a **Lucía** que le ayude a configurar su ordenador. 
+
+Nadie ha gastado un solo euro, todos han resuelto un problema real y el tiempo circula como si fuera dinero en un banco.
+
+### ¿Qué problema técnico resuelve ChronoShare?
+Los bancos de tiempo tradicionales suelen fracasar porque la gente desconfía ("¿y si doy una clase y luego la otra persona no me paga las horas?") o porque llevar las cuentas es un lío. ChronoShare automatiza todo esto funcionando como un banco real: **retiene las horas preventivamente** cuando se pide un servicio (*Escrow*), lleva un **libro contable exacto** de cada movimiento y exige **valoraciones mutuas** tras cada trato.
 
 ---
 
 ## 2. Funcionalidades Principales (MVP)
 
-* **Monedero de Tiempo y Bono de Bienvenida:** Cada usuario recibe `2.0 horas` gratuitas al registrarse para dinamizar los primeros intercambios. El saldo se divide en *Horas Disponibles* y *Horas Retenidas*.
-* **Marketplace de Servicios:** Catálogo con búsqueda predictiva y filtros por categoría (Académico, Tecnología, Idiomas, Hogar), modalidad (Online / Presencial) y coste en horas.
+* **Monedero de Tiempo y Bono de Bienvenida:** Cada usuario recibe `2.0 horas` gratuitas al registrarse para dinamizar los primeros intercambios. El saldo se divide en *Horas Disponibles* (las que puedes gastar ya) y *Horas Retenidas* (las que tienes reservadas en tratos pendientes).
+* **Marketplace de Servicios:** Catálogo con buscador y filtros por categoría (Académico, Tecnología, Idiomas, Hogar), modalidad (Online / Presencial) y coste en horas.
 * **Sistema de Intercambio Seguro (Flujo de Estados):**
   1. `PENDING`: El solicitante pide un servicio y sus horas quedan bloqueadas preventivamente.
-  2. `ACCEPTED`: El proveedor acepta la solicitud y se habilita el chat interno.
+  2. `ACCEPTED`: El proveedor acepta la solicitud y se habilita el chat interno para acordar día y hora.
   3. `COMPLETED`: Tras realizar el servicio, ambos confirman y las horas se transfieren oficialmente al monedero del proveedor.
   4. `CANCELLED`: Si se cancela antes de realizarse, las horas retenidas vuelven automáticamente al solicitante.
-* **Libro Contable Transparente:** Historial detallado estilo bancario con todos los movimientos de ingresos, gastos y retenciones.
+* **Libro Contable Transparente:** Historial detallado estilo cuenta bancaria con todos los movimientos de ingresos, gastos y retenciones.
 * **Sistema de Reputación Cruzada:** Valoraciones de 1 a 5 estrellas y comentarios obligatorios tras finalizar cada intercambio.
 
 ---
