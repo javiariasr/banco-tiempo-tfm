@@ -1,6 +1,6 @@
 # ⏳ ChronoShare — Banco de Tiempo Universitario y Local
 
-> **Trabajo Fin de Máster (TFM)** — Máster de Desarrollo con IA (BIG school)[cite: 1]  
+> **Trabajo Fin de Máster (TFM)** — Máster de Desarrollo con IA (BIG school)  
 > **Estado del proyecto:** 🚧 Fase 1: Arquitectura, Diseño y Estructura Base (Entrega Fundae)
 
 ---
@@ -85,3 +85,72 @@ erDiagram
         float amount
         datetime createdAt
     }
+```
+
+---
+
+## 5. Estructura del Proyecto
+
+```text
+banco-tiempo-tfm/
+├── docs/                   # Documentación y slides de presentación del TFM
+├── prisma/
+│   └── schema.prisma       # Esquema relacional de la base de datos
+├── src/
+│   ├── app/                # Rutas de la aplicación (Next.js App Router)
+│   │   ├── (auth)/         # Vistas de inicio de sesión y registro
+│   │   ├── dashboard/      # Panel principal del usuario y resumen de actividad
+│   │   ├── explore/        # Catálogo y buscador de servicios
+│   │   ├── services/[id]/  # Detalle del servicio y solicitud de intercambio
+│   │   ├── exchanges/[id]/ # Chat interno y gestión de estados del trato
+│   │   └── wallet/         # Historial contable de transacciones de horas
+│   ├── components/
+│   │   ├── ui/             # Componentes base (shadcn/ui)
+│   │   └── shared/         # Componentes reutilizables (Navbar, ServiceCard)
+│   ├── lib/
+│   │   └── actions/        # Server Actions (lógica de negocio y transacciones)
+│   └── types/              # Definiciones de tipos TypeScript
+└── README.md               # Documentación principal del proyecto
+```
+
+---
+
+## 6. Instalación y Ejecución Local
+
+> *Nota: Actualmente el proyecto se encuentra en fase de arquitectura inicial. En las próximas iteraciones se añadirá el archivo `.env.example` y el script `seed.ts`.*
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/javiariasr/banco-tiempo-tfm.git](https://github.com/javiariasr/banco-tiempo-tfm.git)
+   cd banco-tiempo-tfm
+   ```
+
+2. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
+
+3. **Ejecutar el servidor de desarrollo:**
+   ```bash
+   npm run dev
+   ```
+   Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
+
+---
+
+## 7. Hoja de Ruta (Roadmap)
+
+* [x] **Fase 1 (Entrega Fundae):** Definición funcional, diseño UX, modelado de base de datos (`schema.prisma`), estructura base del repositorio y presentación inicial.
+* [ ] **Fase 2:** Configuración de Supabase, autenticación de usuarios y creación del script de datos de prueba (*seeding*).
+* [ ] **Fase 3:** Desarrollo del Marketplace (CRUD de servicios y filtros de búsqueda).
+* [ ] **Fase 4:** Implementación del motor de transacciones (`ESCROW`), chat interno y sistema de valoraciones.
+* [ ] **Fase 5:** Despliegue en producción en Vercel, pruebas E2E y documentación final.
+
+---
+
+## 8. Entregables del TFM
+
+* **URL de Despliegue:** *Pendiente de despliegue en Fase 5 (Vercel)*
+* **Credenciales de Prueba:** *Se habilitarán tras el despliegue con datos precargados*
+* **Presentación (Slides):** [Ver presentación en Google Slides](https://docs.google.com/presentation/d/1Pf2wUI2ddvGw63QsCVdu_hYTfcEnByPL2UHNbT7wDos/edit?usp=sharing) (también disponible en PDF dentro de la carpeta `/docs`)
+* **Vídeo Demostrativo:** *(Añadir aquí el enlace público de YouTube/Drive tras grabar)*
