@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⏳ ChronoShare — Banco de Tiempo Universitario y Local
 
-## Getting Started
+> **Trabajo Fin de Máster (TFM)** — Máster de Desarrollo con IA (BIG school)[cite: 1]  
+> **Estado del proyecto:** 🚧 Fase 1: Arquitectura, Diseño y Estructura Base (Entrega Fundae)
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 1. Descripción General del Proyecto
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**ChronoShare** es una plataforma web de economía colaborativa basada en el intercambio de servicios utilizando el **tiempo como única moneda de cambio** (1 hora ofrecida = 1 hora recibida, independientemente de la complejidad del servicio).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Está diseñada específicamente para **comunidades universitarias y entornos locales** (barrios o asociaciones), permitiendo que estudiantes y vecinos intercambien habilidades —como clases particulares, idiomas, diseño gráfico, reparaciones domésticas o soporte informático— sin necesidad de dinero y fomentando la confianza mutua.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### El problema que resuelve
+Los bancos de tiempo tradicionales suelen fracasar por dos motivos: **falta de confianza** entre desconocidos y **fricción en la gestión de saldos**. ChronoShare soluciona esto mediante un sistema de **retención preventiva de horas (*Escrow*)**, perfiles verificados y un historial contable transparente.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 2. Funcionalidades Principales (MVP)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* **Monedero de Tiempo y Bono de Bienvenida:** Cada usuario recibe `2.0 horas` gratuitas al registrarse para dinamizar los primeros intercambios. El saldo se divide en *Horas Disponibles* y *Horas Retenidas*.
+* **Marketplace de Servicios:** Catálogo con búsqueda predictiva y filtros por categoría (Académico, Tecnología, Idiomas, Hogar), modalidad (Online / Presencial) y coste en horas.
+* **Sistema de Intercambio Seguro (Flujo de Estados):**
+  1. `PENDING`: El solicitante pide un servicio y sus horas quedan bloqueadas preventivamente.
+  2. `ACCEPTED`: El proveedor acepta la solicitud y se habilita el chat interno.
+  3. `COMPLETED`: Tras realizar el servicio, ambos confirman y las horas se transfieren oficialmente al monedero del proveedor.
+  4. `CANCELLED`: Si se cancela antes de realizarse, las horas retenidas vuelven automáticamente al solicitante.
+* **Libro Contable Transparente:** Historial detallado estilo bancario con todos los movimientos de ingresos, gastos y retenciones.
+* **Sistema de Reputación Cruzada:** Valoraciones de 1 a 5 estrellas y comentarios obligatorios tras finalizar cada intercambio.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 3. Stack Tecnológico
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+El proyecto está construido bajo una arquitectura *Full-Stack* tipada de extremo a extremo, optimizada para el desarrollo asistido por IA:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* **Frontend & Backend:** [Next.js](https://nextjs.org/) (App Router) + [TypeScript](https://www.typescriptlang.org/)
+* **Estilos e Interfaz (UI):** [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
+* **Base de Datos y Autenticación:** [Supabase](https://supabase.com/) (PostgreSQL)
+* **ORM:** [Prisma](https://www.prisma.io/) (Gestión de esquema y transacciones ACID)
+* **Entorno de Desarrollo:** Google Antigravity IDE
+* **Despliegue (CI/CD):** [Vercel](https://vercel.com/)
+
+---
+
+## 4. Arquitectura y Modelo de Datos
+
+El núcleo del sistema garantiza la integridad de los saldos mediante transacciones atómicas en PostgreSQL.
+
+```mermaid
+erDiagram
+    User ||--o{ Service : "ofrece"
+    User ||--o{ Exchange : "solicita / provee"
+    User ||--o{ Transaction : "registra"
+    User ||--o{ Review : "escribe / recibe"
+    Service ||--o{ Exchange : "genera"
+    Exchange ||--o{ Transaction : "origina"
+    Exchange ||--o{ Message : "contiene"
+    Exchange ||--o{ Review : "evalúa"
+
+    User {
+        string id PK
+        string email
+        string name
+        float availableHours
+        float heldHours
+        float ratingAvg
+    }
+    Service {
+        string id PK
+        string title
+        string category
+        float hoursCost
+        enum modality
+    }
+    Exchange {
+        string id PK
+        float hoursAmount
+        enum status
+        datetime scheduledAt
+    }
+    Transaction {
+        string id PK
+        enum type
+        float amount
+        datetime createdAt
+    }

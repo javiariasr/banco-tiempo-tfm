@@ -1,0 +1,156 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// ENUMS (Estados y Tipos Controlados)
+// ==========================================
+
+enum ServiceModality {
+  ONLINE
+  IN_PERSON
+}
+
+enum ServiceStatus {
+  ACTIVE
+  PAUSED
+}
+
+enum ExchangeStatus {
+  PENDING     // Solicitado (horas retenidas)
+  ACCEPTED    // Aceptado por el proveedor
+  COMPLETED   // Realizado y confirmado (horas transferidas)
+  CANCELLED   // Cancelado (horas devueltas)
+  DISPUTED    // En revisión por incidencia
+}
+
+enum TransactionType {
+  WELCOME_BONUS // Bono inicial al registrarse
+  ESCROW_HOLD   // Retención preventiva al solicitar servicio
+  ESCROW_RELEASE// Liberación de retención (por cancelación)
+  INCOME        // Horas ganadas tras completar un servicio
+  EXPENSE       // Horas gastadas tras recibir un servicio
+}
+
+// ==========================================
+// MODELOS PRINCIPALES
+// ==========================================
+
+model User {
+  id               String   @id @default(uuid())
+  email            String   @unique
+  name             String
+  bio              String?
+  avatarUrl        String?
+  universityOrArea String?  // Ej: "Campus Moncloa" o "Barrio Centro"
+
+  // Monedero de Tiempo (en horas, ej: 2.5 = 2h 30m)
+  availableHours   Float    @default(2.0)
+  heldHours        Float    @default(0.0)
+
+  ratingAvg        Float    @default(0.0)
+  ratingCount      Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relaciones
+  servicesOffered    Service[]
+  exchangesRequested Exchange[]    @relation("RequesterExchanges")
+  exchangesProvided  Exchange[]    @relation("ProviderExchanges")
+  transactions       Transaction[]
+  messagesSent       Message[]
+  reviewsWritten     Review[]      @relation("ReviewsWritten")
+  reviewsReceived    Review[]      @relation("ReviewsReceived")
+}
+
+model Service {
+  id          String          @id @default(uuid())
+  title       String
+  description String
+  category    String          // Ej: "Académico", "Idiomas", "Tecnología", "Hogar"
+  hoursCost   Float           // Ej: 0.5, 1.0, 2.0
+  modality    ServiceModality @default(ONLINE)
+  status      ServiceStatus   @default(ACTIVE)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relaciones
+  providerId  String
+  provider    User            @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  exchanges   Exchange[]
+}
+
+model Exchange {
+  id          String         @id @default(uuid())
+  hoursAmount Float
+  status      ExchangeStatus @default(PENDING)
+  scheduledAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relaciones
+  serviceId   String
+  service     Service        @relation(fields: [serviceId], references: [id])
+
+  requesterId String
+  requester   User           @relation("RequesterExchanges", fields: [requesterId], references: [id])
+
+  providerId  String
+  provider    User           @relation("ProviderExchanges", fields: [providerId], references: [id])
+
+  transactions Transaction[]
+  messages     Message[]
+  reviews      Review[]
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  type        TransactionType
+  amount      Float           // Siempre positivo; el tipo indica si suma o resta
+  description String
+  createdAt   DateTime        @default(now())
+
+  // Relaciones
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  exchangeId  String?
+  exchange    Exchange?       @relation(fields: [exchangeId], references: [id])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  content    String
+  createdAt  DateTime @default(now())
+
+  // Relaciones
+  exchangeId String
+  exchange   Exchange @relation(fields: [exchangeId], references: [id], onDelete: Cascade)
+
+  senderId   String
+  sender     User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  rating     Int      // 1 a 5 estrellas
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  // Relaciones
+  exchangeId String
+  exchange   Exchange @relation(fields: [exchangeId], references: [id], onDelete: Cascade)
+
+  authorId   String
+  author     User     @relation("ReviewsWritten", fields: [authorId], references: [id])
+
+  targetId   String
+  target     User     @relation("ReviewsReceived", fields: [targetId], references: [id])
+}
