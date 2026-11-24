@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { createClient } from '@/utils/supabase/server';
 import { ServiceModality, ServiceStatus } from '@prisma/client';
 import Navbar from '@/components/Navbar';
-import { toggleServiceStatus } from './actions';
+import { toggleServiceStatus, requestExchange } from './actions';
 
 async function ServiceDetailContent({
     params,
@@ -136,8 +136,8 @@ async function ServiceDetailContent({
                                     <button
                                         type="submit"
                                         className={`w-full py-2.5 px-4 rounded-lg text-sm font-medium transition ${service.status === ServiceStatus.ACTIVE
-                                                ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
-                                                : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                                            ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                                            : 'bg-emerald-600 text-white hover:bg-emerald-700'
                                             }`}
                                     >
                                         {service.status === ServiceStatus.ACTIVE
@@ -163,14 +163,14 @@ async function ServiceDetailContent({
                                 </div>
 
                                 {hasEnoughHours ? (
-                                    <button
-                                        type="button"
-                                        disabled
-                                        className="w-full bg-indigo-600/90 text-white py-2.5 px-4 rounded-lg text-sm font-medium cursor-not-allowed"
-                                        title="Se activará en la Fase 4 con el motor Escrow"
-                                    >
-                                        Solicitar intercambio (Fase 4)
-                                    </button>
+                                    <form action={requestExchange.bind(null, service.id)}>
+                                        <button
+                                            type="submit"
+                                            className="w-full bg-indigo-600 text-white py-2.5 px-4 rounded-lg text-sm font-medium hover:bg-indigo-700 transition cursor-pointer"
+                                        >
+                                            Solicitar intercambio ({service.hoursCost.toFixed(1)}h)
+                                        </button>
+                                    </form>
                                 ) : (
                                     <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-xs text-red-700">
                                         No tienes horas suficientes. Publica un servicio para ganar más tiempo.

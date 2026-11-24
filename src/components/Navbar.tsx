@@ -41,6 +41,13 @@ export default async function Navbar() {
                                 + Publicar servicio
                             </Link>
 
+                            <Link
+                                href="/exchanges"
+                                className="text-sm font-medium text-slate-700 hover:text-indigo-600 transition px-2 py-1"
+                            >
+                                Mis intercambios
+                            </Link>
+
                             <span className="hidden md:inline text-sm text-slate-600 font-medium">
                                 {dbUser.name}
                             </span>
