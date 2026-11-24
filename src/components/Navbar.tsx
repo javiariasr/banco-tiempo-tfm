@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import { connection } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/prisma';
 import { signout } from '@/app/login/actions';
 
 export default async function Navbar() {
+    await connection();
     const supabase = await createClient();
     const {
         data: { user: authUser },
@@ -35,17 +37,17 @@ export default async function Navbar() {
                             </div>
 
                             <Link
-                                href="/services/new"
-                                className="bg-indigo-600 text-white px-3.5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
-                            >
-                                + Publicar servicio
-                            </Link>
-
-                            <Link
                                 href="/exchanges"
                                 className="text-sm font-medium text-slate-700 hover:text-indigo-600 transition px-2 py-1"
                             >
                                 Mis intercambios
+                            </Link>
+
+                            <Link
+                                href="/services/new"
+                                className="bg-indigo-600 text-white px-3.5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+                            >
+                                + Publicar servicio
                             </Link>
 
                             <span className="hidden md:inline text-sm text-slate-600 font-medium">

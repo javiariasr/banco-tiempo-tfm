@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { ServiceStatus, ServiceModality } from '@prisma/client';
 import Navbar from '@/components/Navbar';
+import { connection } from 'next/server';
 
 const CATEGORIES = ['Todas', 'Académico', 'Idiomas', 'Tecnología', 'Hogar', 'Otros'];
 
@@ -11,9 +12,9 @@ async function ServicesGrid({
 }: {
   searchParams: Promise<{ q?: string; category?: string }>;
 }) {
+  await connection();
   const { q, category } = await searchParams;
   const activeCategory = category && category !== 'Todas' ? category : undefined;
-
   const services = await prisma.service.findMany({
     where: {
       status: ServiceStatus.ACTIVE,
@@ -53,8 +54,8 @@ async function ServicesGrid({
                 key={cat}
                 href={href}
                 className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition ${isSelected
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                   }`}
               >
                 {cat}
