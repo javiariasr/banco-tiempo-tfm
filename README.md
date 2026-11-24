@@ -38,6 +38,9 @@ Los bancos de tiempo tradicionales suelen fracasar porque la gente desconfía ("
   4. `CANCELLED`: Si se cancela antes de realizarse, las horas retenidas vuelven automáticamente al solicitante.
 * **Libro Contable Transparente:** Historial detallado estilo cuenta bancaria con todos los movimientos de ingresos, gastos y retenciones.
 * **Sistema de Reputación Cruzada:** Valoraciones de 1 a 5 estrellas y comentarios obligatorios tras finalizar cada intercambio.
+* **Asistente Inteligente Integrado (IA Generativa):**
+  * *Copiloto de Publicación de Servicios:* A partir de una descripción breve e informal del usuario, la IA redacta automáticamente un título atractivo, estructura los puntos clave del servicio, asigna la categoría adecuada y sugiere una duración estimada en horas.
+  * *Síntesis Inteligente de Reputación:* Analiza las valoraciones recibidas por un usuario tras sus intercambios para generar un resumen objetivo de sus puntos fuertes y etiquetas de confianza en su perfil.
 
 ---
 
@@ -51,6 +54,7 @@ El proyecto está construido bajo una arquitectura *Full-Stack* tipada de extrem
 * **ORM:** [Prisma](https://www.prisma.io/) (Gestión de esquema y transacciones ACID)
 * **Entorno de Desarrollo:** Google Antigravity IDE
 * **Despliegue (CI/CD):** [Vercel](https://vercel.com/)
+* **Inteligencia Artificial:** [Google Gemini API](https://ai.google.dev/) (Generación estructurada mediante *Server Actions*)
 
 ---
 
@@ -155,7 +159,8 @@ banco-tiempo-tfm/
 * [ ] **Fase 2:** Configuración de Supabase, autenticación de usuarios y creación del script de datos de prueba (*seeding*).
 * [ ] **Fase 3:** Desarrollo del Marketplace (CRUD de servicios y filtros de búsqueda).
 * [ ] **Fase 4:** Implementación del motor de transacciones (`ESCROW`), chat interno y sistema de valoraciones.
-* [ ] **Fase 5:** Despliegue en producción en Vercel, pruebas E2E y documentación final.
+* [ ] **Fase 5 (IA & Despliegue):** Integración de las funcionalidades de IA (Asistente de publicación y Síntesis de reseñas), despliegue en producción en Vercel y documentación final.
+
 
 ---
 
