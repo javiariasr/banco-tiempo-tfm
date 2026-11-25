@@ -159,7 +159,7 @@ banco-tiempo-tfm/
 * [x] **Fase 2:** Configuración de Supabase, autenticación de usuarios y creación del script de datos de prueba (*seeding*).
 * [x] **Fase 3:** Desarrollo del Marketplace (CRUD de servicios y filtros de búsqueda).
 * [x] **Fase 4:** Implementación del motor de transacciones (`ESCROW`), chat interno y sistema de valoraciones.
-* [ ] **Fase 5 (IA & Despliegue):** Integración de las funcionalidades de IA (Asistente de publicación y Síntesis de reseñas), despliegue en producción en Vercel y documentación final.
+* [] **Fase 5 (IA & Despliegue):** Integración de las funcionalidades de IA (Asistente de publicación y Síntesis de reseñas), despliegue en producción en Vercel y documentación final.
 
 
 ---

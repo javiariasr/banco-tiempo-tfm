@@ -1,10 +1,12 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { connection } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createClient } from '@/utils/supabase/server';
 import { ServiceModality, ServiceStatus } from '@prisma/client';
 import Navbar from '@/components/Navbar';
+import ReputationSummary from '@/components/ReputationSummary';
 import { toggleServiceStatus, requestExchange } from './actions';
 
 async function ServiceDetailContent({
@@ -12,6 +14,7 @@ async function ServiceDetailContent({
 }: {
     params: Promise<{ id: string }>;
 }) {
+    await connection();
     const { id } = await params;
 
     const service = await prisma.service.findUnique({
@@ -94,6 +97,11 @@ async function ServiceDetailContent({
                             Valoraciones de {service.provider.name} ({service.provider.ratingCount})
                         </h3>
 
+                        <ReputationSummary
+                            providerId={service.provider.id}
+                            ratingCount={service.provider.ratingCount}
+                        />
+
                         {service.provider.reviewsReceived.length === 0 ? (
                             <p className="text-sm text-slate-500">
                                 Este miembro aún no tiene valoraciones registradas.
@@ -135,9 +143,9 @@ async function ServiceDetailContent({
                                 <form action={toggleAction}>
                                     <button
                                         type="submit"
-                                        className={`w-full py-2.5 px-4 rounded-lg text-sm font-medium transition ${service.status === ServiceStatus.ACTIVE
-                                            ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
-                                            : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                                        className={`w-full py-2.5 px-4 rounded-lg text-sm font-medium transition cursor-pointer ${service.status === ServiceStatus.ACTIVE
+                                                ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                                                : 'bg-emerald-600 text-white hover:bg-emerald-700'
                                             }`}
                                     >
                                         {service.status === ServiceStatus.ACTIVE
